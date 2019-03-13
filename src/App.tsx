@@ -1,12 +1,11 @@
 import * as React from 'react';
 import './App.css';
 
-import Home from './Page/Home/Home';
-import Register from './Page/Register/Register';
+import Calculator from './Page/Calculator/Calculator';
 
 class App extends React.Component {
   public render() {
-    return <Register />;
+    return <Calculator />;
   }
 }
 
