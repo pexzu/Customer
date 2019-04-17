@@ -1,11 +1,11 @@
 import * as React from 'react';
 import './App.css';
 
-import Calculator from './Page/Calculator/Calculator';
+import Customer from './Main/Customer/Customer';
 
 class App extends React.Component {
   public render() {
-    return <Calculator />;
+    return <Customer />;
   }
 }
 

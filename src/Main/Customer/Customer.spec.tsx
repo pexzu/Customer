@@ -1,32 +1,32 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import Calculator from './Calculator';
+import Customer from './Customer';
 import { shallow } from 'enzyme';
 import { configure } from 'enzyme';
 import * as Adapter from 'enzyme-adapter-react-16';
-import * as E from './CalculatorStyle';
+import * as E from './CustomerStyle';
 
 configure({ adapter: new Adapter() });
 
 it('renders without crashing', () => {
-  shallow(<Calculator />);
+  shallow(<Customer />);
 });
 
-it('renders without crashing', () => {
-  shallow(<E.CalculatorOperator />);
-});
+// it('renders without crashing', () => {
+//   shallow(<E.CalculatorOperator />);
+// });
 
-it('renders without crashing', () => {
-  shallow(<E.CalculatorNumberField />);
-});
+// it('renders without crashing', () => {
+//   shallow(<E.CalculatorNumberField />);
+// });
 
-it('renders without crashing', () => {
-  shallow(<E.CalculatorResult />);
-});
+// it('renders without crashing', () => {
+//   shallow(<E.CalculatorResult />);
+// });
 
-it('renders without crashing', () => {
-  shallow(<E.CalculatorContainer />);
-});
+// it('renders without crashing', () => {
+//   shallow(<E.CalculatorContainer />);
+// });
 
 test('Adding 1 + 1 equals 2', () => {
   expect(1 + 1).toBe(2);
