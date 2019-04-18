@@ -8,7 +8,7 @@ import {
   deleteCustomerAction,
 } from '../../Actions/addCustomerAction';
 import * as Redux from 'redux';
-import { TWithReduxDispatch, TCustomer } from '../../global';
+import { TWithReduxDispatch, TCustomer, IState } from '../../global';
 import Card from 'src/Component/Card/Card';
 
 interface CustomerProps {}
@@ -85,21 +85,21 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
     });
   };
 
-  addCustomer = (event: any) => {
+  addCustomer = () => {
     const { firstName, lastName, dob } = this.state;
     this.props.dispatch(addCustomerAction({ firstName: firstName, lastName: lastName, dob: dob }));
     this.toggleAddCustomer();
     alert('New customer details added');
   };
 
-  searchAllCustomer = (event: any) => {
+  searchAllCustomer = () => {
     this.props.dispatch(searchCustomerAction(this.state.customerSearchName));
     this.setState({
       showCard: true,
     });
   };
 
-  cancelCustomerSearch = (event: any) => {
+  cancelCustomerSearch = () => {
     this.setState({
       searchCustomer: !this.state.searchCustomer,
     });
@@ -129,27 +129,27 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
     alert('Customer details modified');
   };
 
-  updateCustomerFirstName = (event: any) => {
+  updateCustomerFirstName = (event: React.SyntheticEvent<HTMLInputElement>) => {
     this.setState({
-      firstName: event.target.value.trim(),
+      firstName: event.currentTarget.value.trim(),
     });
   };
 
-  updateCustomerLastName = (event: any) => {
+  updateCustomerLastName = (event: React.SyntheticEvent<HTMLInputElement>) => {
     this.setState({
-      lastName: event.target.value.trim(),
+      lastName: event.currentTarget.value.trim(),
     });
   };
 
-  updateCustomerDOB = (event: any) => {
+  updateCustomerDOB = (event: React.SyntheticEvent<HTMLInputElement>) => {
     this.setState({
-      dob: event.target.value.trim(),
+      dob: event.currentTarget.value.trim(),
     });
   };
 
-  updateCustomerSearchName = (event: any) => {
+  updateCustomerSearchName = (event: React.SyntheticEvent<HTMLInputElement>) => {
     this.setState({
-      customerSearchName: event.target.value.trim(),
+      customerSearchName: event.currentTarget.value.trim(),
     });
   };
 
@@ -274,7 +274,7 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
   };
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: IState) {
   return { customerListSearched: state.customer.customerListSearched || [] };
 }
 
