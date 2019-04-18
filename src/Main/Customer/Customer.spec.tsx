@@ -9,7 +9,7 @@ import * as E from './CustomerStyle';
 configure({ adapter: new Adapter() });
 
 it('renders without crashing', () => {
-  shallow(<Customer />);
+  shallow(<Customer dispatch={() => {}} />);
 });
 
 // it('renders without crashing', () => {

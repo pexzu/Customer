@@ -1,7 +1,10 @@
 import * as React from 'react';
 import * as E from './CustomerStyle';
 import InputBlock from '../../Component/InputBlock';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { connect } from 'react-redux';
+import { addCustomerAction } from '../../Actions/addCustomerAction';
+import * as Redux from 'redux';
+import { TWithReduxDispatch } from '../../global';
 
 interface CustomerProps {}
 interface CustomerState {
@@ -10,8 +13,11 @@ interface CustomerState {
   editCustomer: boolean;
   searchCustomer: boolean;
 }
-export default class Calculator extends React.Component<CustomerProps, CustomerState> {
-  constructor(props: CustomerProps) {
+
+type CustomerCombinedProps = TWithReduxDispatch & CustomerProps;
+
+class Customer extends React.Component<CustomerCombinedProps, CustomerState> {
+  constructor(props: CustomerCombinedProps) {
     super(props);
     this.state = {
       addCustomer: false,
@@ -22,7 +28,6 @@ export default class Calculator extends React.Component<CustomerProps, CustomerS
   }
 
   toggleAddCustomer = () => {
-    debugger;
     this.setState({
       addCustomer: !this.state.addCustomer,
     });
@@ -44,6 +49,10 @@ export default class Calculator extends React.Component<CustomerProps, CustomerS
     this.setState({
       searchCustomer: !this.state.searchCustomer,
     });
+  };
+
+  addCustomer = (event: any) => {
+    this.props.dispatch(addCustomerAction());
   };
 
   render() {
@@ -76,7 +85,7 @@ export default class Calculator extends React.Component<CustomerProps, CustomerS
         <InputBlock fieldName='FirstName' />
         <InputBlock fieldName='LastName' />
         <InputBlock fieldName='Date of Birth' />
-        <button> Save </button>
+        <button onClick={this.addCustomer}> Save </button>
       </div>
     );
   };
@@ -91,3 +100,12 @@ export default class Calculator extends React.Component<CustomerProps, CustomerS
     );
   };
 }
+
+const mapStateToProps = (state: any) => (
+  console.log(state),
+  {
+    ...state,
+  }
+);
+
+export default connect(mapStateToProps)(Customer);
