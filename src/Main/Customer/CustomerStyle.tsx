@@ -15,4 +15,6 @@ export const CustomerContainer = styled('div')`
   left: 0;
 `;
 
-
+export const CustomerContainerTitle = styled('div')`
+  padding: 9px 0;
+`;

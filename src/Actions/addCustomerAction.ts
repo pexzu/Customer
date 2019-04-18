@@ -7,3 +7,17 @@ export const addCustomerAction = (customer: TCustomer) => (dispatch: Redux.Dispa
     payload: customer,
   });
 };
+
+export const searchCustomerAction = (customerSearchName: string) => (dispatch: Redux.Dispatch) => {
+  dispatch({
+    type: 'SEARCH_CUSTOMER',
+    payload: customerSearchName,
+  });
+};
+
+export const deleteCustomerAction = (customer: TCustomer) => (dispatch: Redux.Dispatch) => {
+  dispatch({
+    type: 'DELETE_CUSTOMER',
+    payload: customer,
+  });
+};
