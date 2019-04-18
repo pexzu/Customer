@@ -160,36 +160,43 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
     return (
       <E.CustomerContainer>
         <E.CustomerContainerTitle>Select an Operation to Perform</E.CustomerContainerTitle>
-        <div>
-          <span>
-            <button onClick={this.toggleAddCustomer} disabled={oneButtonisActive}>
+        <E.CustomerInnerBlock>
+          <E.CustomerAddBlock>
+            <E.CustomerPrimaryButton onClick={this.toggleAddCustomer} disabled={oneButtonisActive}>
               Add new customer
-            </button>
+            </E.CustomerPrimaryButton>
             {(this.state.addCustomer || this.state.editCustomer) && this.renderAddCustomer()}
-          </span>
-          <span>
-            <button onClick={this.toggleSearchCustomer} disabled={oneButtonisActive}>
+          </E.CustomerAddBlock>
+          <E.CustomerSearchBlock>
+            <E.CustomerPrimaryButton
+              onClick={this.toggleSearchCustomer}
+              disabled={oneButtonisActive}
+            >
               Search for a customer
-            </button>
+            </E.CustomerPrimaryButton>
+            <E.CustomerSearchBlockSpecialNote>
+              (Delete and Edit operations will available on proceeding with search)
+            </E.CustomerSearchBlockSpecialNote>
             {this.state.searchCustomer && this.renderSearchCustomer()}
-          </span>
-        </div>
+          </E.CustomerSearchBlock>
+        </E.CustomerInnerBlock>
       </E.CustomerContainer>
     );
   }
 
   renderAddCustomer = () => {
     const { firstName, lastName, dob } = this.state;
-    console.log(firstName, lastName, dob);
     var pattern = /^([0-9]{2})-([0-9]{2})-([0-9]{4})$/;
     let validDOB = false;
     if (pattern.test(this.state.dob)) {
       validDOB = true;
     }
     return (
-      <div>
-        <div>Please provide customer details</div>
-        <div>(required to fill all the fields to save the details)</div>
+      <E.AddCustomerContainer>
+        <E.AddCustomerTitle>Please provide customer details</E.AddCustomerTitle>
+        <E.AddCustomerMandatoryNote>
+          (required to fill all the fields in order to save the details)
+        </E.AddCustomerMandatoryNote>
         <InputBlock
           fieldName='FirstName'
           placeholder='FirstName'
@@ -209,38 +216,51 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
           value={dob}
         />
         {this.state.addCustomer ? (
-          <div>
-            <button onClick={this.addCustomer} disabled={!(firstName && lastName && validDOB)}>
+          <E.CustomerSecondaryButtonGroup>
+            <E.CustomerSecondaryButton
+              onClick={this.addCustomer}
+              disabled={!(firstName && lastName && validDOB)}
+            >
               Save
-            </button>
-            <button onClick={this.toggleAddCustomer}> Cancel </button>
-          </div>
+            </E.CustomerSecondaryButton>
+            <E.CustomerSecondaryButton onClick={this.toggleAddCustomer}>
+              Cancel
+            </E.CustomerSecondaryButton>
+          </E.CustomerSecondaryButtonGroup>
         ) : (
-          <div>
-            <button onClick={this.updateChanges}> Update Changes </button>
-          </div>
+          <E.CustomerSecondaryButtonGroup>
+            <E.CustomerSecondaryButton onClick={this.updateChanges}>
+              Update Changes
+            </E.CustomerSecondaryButton>
+          </E.CustomerSecondaryButtonGroup>
         )}
-      </div>
+      </E.AddCustomerContainer>
     );
   };
 
   renderSearchCustomer = () => {
     return (
-      <div>
-        <div>Please enter customer's first or last name</div>
+      <E.SearchCustomerContainer>
+        <E.SearchCustomerTitle>Please enter customer's first or last name</E.SearchCustomerTitle>
         <InputBlock
           fieldName='Customer Name'
           placeholder='CustomerName'
           onChange={this.updateCustomerSearchName}
           value={this.state.customerSearchName}
         />
-        <button onClick={this.searchAllCustomer}>Search</button>
-        <button onClick={this.cancelCustomerSearch}>Cancel</button>
+        <E.CustomerSecondaryButtonGroup>
+          <E.CustomerSecondaryButton onClick={this.searchAllCustomer}>
+            Search
+          </E.CustomerSecondaryButton>
+          <E.CustomerSecondaryButton onClick={this.cancelCustomerSearch}>
+            Cancel
+          </E.CustomerSecondaryButton>
+        </E.CustomerSecondaryButtonGroup>
         {this.state.searchCustomer &&
+          this.state.showCard &&
           this.props.customerListSearched.map(
             item =>
-              item.firstName &&
-              this.state.showCard && (
+              item.firstName && (
                 <Card
                   key={item.dob + item.firstName}
                   customer={item}
@@ -249,7 +269,7 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
                 />
               )
           )}
-      </div>
+      </E.SearchCustomerContainer>
     );
   };
 }
