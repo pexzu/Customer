@@ -18,6 +18,12 @@ redux - for the global state managemet
 jest- for testing
 typescript- (workspace vertion 3.3.3333)
 
+#Operations
+
+Adding new customer and Searching customer operations are available in the landing page.
+
+Deleting and editing an existing customer will be available as the user proceed to the searching operation.
+
 #Limitations
 
 Due to time constraints, there are only minimal test cases and less validation.
