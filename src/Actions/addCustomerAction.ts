@@ -1,8 +1,9 @@
 import * as Redux from 'redux';
+import { TCustomer } from 'src/global';
 
-export const addCustomerAction = () => (dispatch: Redux.Dispatch) => {
+export const addCustomerAction = (customer: TCustomer) => (dispatch: Redux.Dispatch) => {
   dispatch({
     type: 'ADD_CUSTOMER',
-    payload: 'result_of_simple_action',
+    payload: customer,
   });
 };
