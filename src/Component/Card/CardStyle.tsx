@@ -31,3 +31,18 @@ export const CardEditButton = styled(CardDeleteButton)`
   top: 30px;
   background: skyblue;
 `;
+
+export const CardFieldName = styled('span')`
+  label: CardFieldName;
+  padding: 0 3px;
+  display: inline-block;
+  text-align: left;
+  width: 40%;
+`;
+
+export const CardFieldValue = styled('span')`
+  label: CardFieldValue;
+  padding-left: 3px;
+  display: inline-block;
+  width: 40%;
+`;

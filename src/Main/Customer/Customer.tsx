@@ -17,6 +17,7 @@ interface CustomerState {
   deleteCustomer: boolean;
   editCustomer: boolean;
   searchCustomer: boolean;
+  showCard: boolean;
 
   firstName: string;
   lastName: string;
@@ -38,6 +39,7 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
       deleteCustomer: false,
       editCustomer: false,
       searchCustomer: false,
+      showCard: false,
       firstName: '',
       lastName: '',
       dob: '',
@@ -45,25 +47,39 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
     };
   }
 
+  setAllValuesToDefault = () => {
+    this.setState({
+      firstName: '',
+      lastName: '',
+      dob: '',
+      customerSearchName: '',
+      showCard: false,
+    });
+  };
+
   toggleAddCustomer = () => {
+    this.state.addCustomer && this.setAllValuesToDefault();
     this.setState({
       addCustomer: !this.state.addCustomer,
     });
   };
 
   toggleEditCustomer = () => {
+    this.state.editCustomer && this.setAllValuesToDefault();
     this.setState({
       editCustomer: !this.state.editCustomer,
     });
   };
 
   toggleDeleteCustomer = () => {
+    this.state.deleteCustomer && this.setAllValuesToDefault();
     this.setState({
       deleteCustomer: !this.state.deleteCustomer,
     });
   };
 
   toggleSearchCustomer = () => {
+    this.state.searchCustomer && this.setAllValuesToDefault();
     this.setState({
       searchCustomer: !this.state.searchCustomer,
     });
@@ -73,10 +89,14 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
     const { firstName, lastName, dob } = this.state;
     this.props.dispatch(addCustomerAction({ firstName: firstName, lastName: lastName, dob: dob }));
     this.toggleAddCustomer();
+    alert('New customer details added');
   };
 
-  searchCustomer = (event: any) => {
+  searchAllCustomer = (event: any) => {
     this.props.dispatch(searchCustomerAction(this.state.customerSearchName));
+    this.setState({
+      showCard: true,
+    });
   };
 
   cancelCustomerSearch = (event: any) => {
@@ -86,10 +106,28 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
   };
 
   deleteCustomer = (item: TCustomer) => {
+    this.toggleSearchCustomer();
+    this.props.dispatch(deleteCustomerAction(item));
+    alert('Customer details deleted');
+  };
+
+  editCustomer = (item: TCustomer) => {
+    this.toggleSearchCustomer();
+    this.setState({
+      firstName: item.firstName,
+      lastName: item.lastName,
+      dob: item.dob,
+    });
+    this.toggleEditCustomer();
     this.props.dispatch(deleteCustomerAction(item));
   };
 
-  editCustomer = (item: TCustomer) => {};
+  updateChanges = () => {
+    const { firstName, lastName, dob } = this.state;
+    this.toggleEditCustomer();
+    this.props.dispatch(addCustomerAction({ firstName: firstName, lastName: lastName, dob: dob }));
+    alert('Customer details modified');
+  };
 
   updateCustomerFirstName = (event: any) => {
     this.setState({
@@ -116,7 +154,6 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
   };
 
   render() {
-    console.log(this.props.customerListSearched);
     const { addCustomer, deleteCustomer, editCustomer, searchCustomer } = this.state;
     const oneButtonisActive = addCustomer || deleteCustomer || editCustomer || searchCustomer;
 
@@ -128,7 +165,7 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
             <button onClick={this.toggleAddCustomer} disabled={oneButtonisActive}>
               Add new customer
             </button>
-            {this.state.addCustomer && this.renderAddCustomer()}
+            {(this.state.addCustomer || this.state.editCustomer) && this.renderAddCustomer()}
           </span>
           <span>
             <button onClick={this.toggleSearchCustomer} disabled={oneButtonisActive}>
@@ -143,6 +180,7 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
 
   renderAddCustomer = () => {
     const { firstName, lastName, dob } = this.state;
+    console.log(firstName, lastName, dob);
     var pattern = /^([0-9]{2})-([0-9]{2})-([0-9]{4})$/;
     let validDOB = false;
     if (pattern.test(this.state.dob)) {
@@ -156,21 +194,32 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
           fieldName='FirstName'
           placeholder='FirstName'
           onChange={this.updateCustomerFirstName}
+          value={firstName}
         />
         <InputBlock
           fieldName='LastName'
           placeholder='lastName'
           onChange={this.updateCustomerLastName}
+          value={lastName}
         />
         <InputBlock
           fieldName='Date of Birth'
           placeholder='dd-mm-yyyy'
           onChange={this.updateCustomerDOB}
+          value={dob}
         />
-        <button onClick={this.addCustomer} disabled={!(firstName && lastName && validDOB)}>
-          Save
-        </button>
-        <button onClick={this.toggleAddCustomer}> Cancel </button>
+        {this.state.addCustomer ? (
+          <div>
+            <button onClick={this.addCustomer} disabled={!(firstName && lastName && validDOB)}>
+              Save
+            </button>
+            <button onClick={this.toggleAddCustomer}> Cancel </button>
+          </div>
+        ) : (
+          <div>
+            <button onClick={this.updateChanges}> Update Changes </button>
+          </div>
+        )}
       </div>
     );
   };
@@ -183,18 +232,23 @@ class Customer extends React.Component<TCustomerCombinedProps, CustomerState> {
           fieldName='Customer Name'
           placeholder='CustomerName'
           onChange={this.updateCustomerSearchName}
+          value={this.state.customerSearchName}
         />
-        <button onClick={this.searchCustomer}>Search</button>
+        <button onClick={this.searchAllCustomer}>Search</button>
         <button onClick={this.cancelCustomerSearch}>Cancel</button>
         {this.state.searchCustomer &&
-          this.props.customerListSearched.map(item => (
-            <Card
-              key={item.dob + item.firstName}
-              customer={item}
-              onDeleteClick={this.deleteCustomer}
-              onEditClick={this.editCustomer}
-            />
-          ))}
+          this.props.customerListSearched.map(
+            item =>
+              item.firstName &&
+              this.state.showCard && (
+                <Card
+                  key={item.dob + item.firstName}
+                  customer={item}
+                  onDeleteClick={this.deleteCustomer}
+                  onEditClick={this.editCustomer}
+                />
+              )
+          )}
       </div>
     );
   };

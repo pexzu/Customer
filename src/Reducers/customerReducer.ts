@@ -43,6 +43,7 @@ export default (
         customerListSearched: customerSearched,
       };
       break;
+
     default:
       return state;
   }
